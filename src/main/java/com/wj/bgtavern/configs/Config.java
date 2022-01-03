@@ -1,4 +1,4 @@
-package com.wj.bgtavern.config;
+package com.wj.bgtavern.configs;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

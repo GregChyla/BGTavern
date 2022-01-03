@@ -1,4 +1,4 @@
-package com.wj.bgtavern.model;
+package com.wj.bgtavern.models;
 
 
 import lombok.Getter;

@@ -1,7 +1,8 @@
-package com.wj.bgtavern.dto.mapper;
+package com.wj.bgtavern.models.dtos.mappers;
 
-import com.wj.bgtavern.dto.BoardGameDto;
-import com.wj.bgtavern.model.BoardGame;
+import com.wj.bgtavern.models.BoardGameDescription;
+import com.wj.bgtavern.models.dtos.BoardGameDto;
+import com.wj.bgtavern.models.BoardGame;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -17,7 +18,8 @@ public class BoardGameDtoMapper {
                 .collect(Collectors.toList());
     }
 
-    private static BoardGameDto mapToBoardGameDto(BoardGame boardGame) {
+    public static BoardGameDto mapToBoardGameDto(BoardGame boardGame) {
+        BoardGameDescription boardGameDescription = boardGame.getDescription();
         return BoardGameDto.builder()
                 .id(boardGame.getId())
                 .name(boardGame.getName())
@@ -27,6 +29,7 @@ public class BoardGameDtoMapper {
                 .maxPlayersNumber(boardGame.getMaxPlayersNumber())
                 .complexity(boardGame.getComplexity())
                 .languageDependence(boardGame.getLanguageDependence())
+                .description(boardGameDescription != null ? boardGameDescription.getDescription() : "")
                 .build();
     }
 

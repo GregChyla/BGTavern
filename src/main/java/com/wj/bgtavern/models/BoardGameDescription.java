@@ -1,6 +1,7 @@
-package com.wj.bgtavern.model;
+package com.wj.bgtavern.models;
 
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,8 +14,9 @@ import javax.persistence.*;
 public class BoardGameDescription {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long boardGameId;
     @Column(columnDefinition = "TEXT")
     private String description;
+
+
 }

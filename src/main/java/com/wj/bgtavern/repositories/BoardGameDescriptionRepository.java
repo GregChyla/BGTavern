@@ -1,6 +1,6 @@
-package com.wj.bgtavern.repository;
+package com.wj.bgtavern.repositories;
 
-import com.wj.bgtavern.model.BoardGameDescription;
+import com.wj.bgtavern.models.BoardGameDescription;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

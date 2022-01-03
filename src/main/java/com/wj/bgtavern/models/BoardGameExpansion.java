@@ -1,4 +1,4 @@
-package com.wj.bgtavern.model;
+package com.wj.bgtavern.models;
 
 
 import lombok.Getter;
@@ -9,12 +9,14 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@Table(name="classification_types")
-public class ClassificationType {
-
+@Table(name="board_game_expansions")
+public class BoardGameExpansion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String name;
+    private long expansionGameId;
+    private long coreGameId;
     private String description;
+
+
 }

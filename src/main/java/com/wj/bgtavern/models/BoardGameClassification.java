@@ -1,10 +1,8 @@
-package com.wj.bgtavern.model;
+package com.wj.bgtavern.models;
 
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 
