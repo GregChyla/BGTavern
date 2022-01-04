@@ -14,13 +14,13 @@ public class LanguageCodeService {
     private final LanguageCodeRepository languageCodeRepository;
 
 
-
     public List<LanguageCode> getLanguageCodes() {
         return languageCodeRepository.findAll();
     }
 
     public LanguageCode addLanguageCode(LanguageCode languageCode) {
         if (languageCodeRepository.existsByIsoLanguageName(languageCode.getIsoLanguageName())) {
+            // TODO: Not implemented yet
             return new LanguageCode();
         }
         return languageCodeRepository.save(languageCode);
@@ -28,10 +28,11 @@ public class LanguageCodeService {
 
     public LanguageCode editLanguageCode(LanguageCode languageCode) {
         if (!languageCodeRepository.existsById(languageCode.getId())) {
+            // TODO: Not implemented yet
             return new LanguageCode();
         }
-        if (languageCodeRepository.existsByIsoLanguageName(languageCode.getIsoLanguageName()))
-        {
+        if (languageCodeRepository.existsByIsoLanguageName(languageCode.getIsoLanguageName())) {
+            // TODO: Not implemented yet
             return new LanguageCode();
         }
         return languageCodeRepository.save(languageCode);
@@ -39,6 +40,7 @@ public class LanguageCodeService {
 
     public void deleteLanguageCode(Long id) {
         if (!languageCodeRepository.existsById(id)) {
+            // TODO: Not implemented yet
             return;
         }
         languageCodeRepository.deleteById(id);

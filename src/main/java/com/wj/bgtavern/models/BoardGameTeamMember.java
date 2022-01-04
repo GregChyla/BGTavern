@@ -15,8 +15,7 @@ public class BoardGameTeamMember {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private long boardGameId;
-    private long personId;
-    private long personRoleId;
-
+    private long communityMemberId;
+    private long communityMemberRoleId;
 
 }

@@ -9,11 +9,12 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@Table(name="person_roles")
-public class PersonRole {
+@Table(name="community_member_roles")
+public class CommunityMemberRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
+    private String description;
 }
