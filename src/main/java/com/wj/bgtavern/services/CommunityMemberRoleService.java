@@ -1,5 +1,7 @@
 package com.wj.bgtavern.services;
 
+import com.wj.bgtavern.exceptions.communitymember.CommunityMemberNotFoundException;
+import com.wj.bgtavern.exceptions.communitymemberrole.CommunityMemberRoleAlreadyExistsException;
 import com.wj.bgtavern.models.CommunityMemberRole;
 import com.wj.bgtavern.repositories.CommunityMemberRoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +23,7 @@ public class CommunityMemberRoleService {
 
     public CommunityMemberRole addCommunityMemberRole(CommunityMemberRole communityMemberRole) {
         if (communityMemberRoleRepository.existsByName(communityMemberRole.getName())) {
-            // TODO: Not implemented yet
-            return new CommunityMemberRole();
+            throw new CommunityMemberRoleAlreadyExistsException(communityMemberRole.getName());
         }
         return communityMemberRoleRepository.save(communityMemberRole);
     }
@@ -30,13 +31,10 @@ public class CommunityMemberRoleService {
     @Transactional
     public CommunityMemberRole editCommunityMemberRole(CommunityMemberRole communityMemberRole) {
         if (!communityMemberRoleRepository.existsById(communityMemberRole.getId())) {
-            // TODO: Not implemented yet
-            return new CommunityMemberRole();
+            throw new CommunityMemberNotFoundException(communityMemberRole.getId());
         }
-        if (communityMemberRoleRepository.existsByName(communityMemberRole.getName()))
-        {
-            // TODO: Not implemented yet
-            return new CommunityMemberRole();
+        if (communityMemberRoleRepository.existsByName(communityMemberRole.getName())) {
+            throw new CommunityMemberRoleAlreadyExistsException(communityMemberRole.getName());
         }
         return communityMemberRoleRepository.save(communityMemberRole);
     }

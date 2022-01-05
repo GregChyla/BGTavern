@@ -1,5 +1,7 @@
 package com.wj.bgtavern.services;
 
+import com.wj.bgtavern.exceptions.communitymember.CommunityMemberAlreadyExistsException;
+import com.wj.bgtavern.exceptions.communitymember.CommunityMemberNotFoundException;
 import com.wj.bgtavern.models.CommunityMember;
 import com.wj.bgtavern.repositories.CommunityMemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,29 +22,24 @@ public class CommunityMemberService {
 
     public CommunityMember addCommunityMember(CommunityMember communityMember) {
         if (communityMemberRepository.existsByNameAndNationality(communityMember.getName(), communityMember.getNationality())) {
-            // TODO: Not implemented yet
-            return new CommunityMember();
+            throw new CommunityMemberAlreadyExistsException(communityMember.getName(), communityMember.getNationality());
         }
         return communityMemberRepository.save(communityMember);
     }
 
     public CommunityMember editCommunityMember(CommunityMember communityMember) {
         if (!communityMemberRepository.existsById(communityMember.getId())) {
-            // TODO: Not implemented yet
-            return null;
+            throw new CommunityMemberNotFoundException(communityMember.getId());
         }
-        if (communityMemberRepository.existsByNameAndNationality(communityMember.getName(), communityMember.getNationality()))
-        {
-            // TODO: Not implemented yet
-            return null;
+        if (communityMemberRepository.existsByNameAndNationality(communityMember.getName(), communityMember.getNationality())) {
+            throw new CommunityMemberAlreadyExistsException(communityMember.getName(), communityMember.getNationality());
         }
         return communityMemberRepository.save(communityMember);
     }
 
     public void deleteCommunityMember(Long id) {
         if (!communityMemberRepository.existsById(id)) {
-            // TODO: Not implemented yet
-            return;
+            throw new CommunityMemberNotFoundException(id);
         }
         communityMemberRepository.deleteById(id);
     }

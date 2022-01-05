@@ -1,5 +1,7 @@
 package com.wj.bgtavern.services;
 
+import com.wj.bgtavern.exceptions.languagecode.LanguageCodeAlreadyExistsException;
+import com.wj.bgtavern.exceptions.languagecode.LanguageCodeNotFoundException;
 import com.wj.bgtavern.models.LanguageCode;
 import com.wj.bgtavern.repositories.LanguageCodeRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,28 +22,24 @@ public class LanguageCodeService {
 
     public LanguageCode addLanguageCode(LanguageCode languageCode) {
         if (languageCodeRepository.existsByIsoLanguageName(languageCode.getIsoLanguageName())) {
-            // TODO: Not implemented yet
-            return new LanguageCode();
+            throw new LanguageCodeAlreadyExistsException(languageCode.getIsoLanguageName());
         }
         return languageCodeRepository.save(languageCode);
     }
 
     public LanguageCode editLanguageCode(LanguageCode languageCode) {
         if (!languageCodeRepository.existsById(languageCode.getId())) {
-            // TODO: Not implemented yet
-            return new LanguageCode();
+            throw new LanguageCodeNotFoundException(languageCode.getId());
         }
         if (languageCodeRepository.existsByIsoLanguageName(languageCode.getIsoLanguageName())) {
-            // TODO: Not implemented yet
-            return new LanguageCode();
+            throw new LanguageCodeAlreadyExistsException(languageCode.getIsoLanguageName());
         }
         return languageCodeRepository.save(languageCode);
     }
 
     public void deleteLanguageCode(Long id) {
         if (!languageCodeRepository.existsById(id)) {
-            // TODO: Not implemented yet
-            return;
+            throw new LanguageCodeNotFoundException(id);
         }
         languageCodeRepository.deleteById(id);
     }

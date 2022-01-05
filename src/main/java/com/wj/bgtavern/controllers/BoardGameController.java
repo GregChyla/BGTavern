@@ -1,11 +1,11 @@
 package com.wj.bgtavern.controllers;
 
+import com.wj.bgtavern.models.BoardGame;
 import com.wj.bgtavern.models.BoardGameDescription;
 import com.wj.bgtavern.models.dtos.BoardGameDto;
 import com.wj.bgtavern.models.dtos.BoardGameHeaderDto;
 import com.wj.bgtavern.models.dtos.mappers.BoardGameDescriptionMapper;
 import com.wj.bgtavern.models.dtos.mappers.BoardGameDtoMapper;
-import com.wj.bgtavern.models.BoardGame;
 import com.wj.bgtavern.models.dtos.mappers.BoardGameHeaderDtoMapper;
 import com.wj.bgtavern.models.dtos.mappers.BoardGameMapper;
 import com.wj.bgtavern.services.BoardGameService;

@@ -1,5 +1,7 @@
 package com.wj.bgtavern.services;
 
+import com.wj.bgtavern.exceptions.boardgame.BoardGameAlreadyExistsException;
+import com.wj.bgtavern.exceptions.boardgame.BoardGameNotFoundException;
 import com.wj.bgtavern.models.BoardGame;
 import com.wj.bgtavern.models.BoardGameDescription;
 import com.wj.bgtavern.repositories.BoardGameDescriptionRepository;
@@ -10,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +27,9 @@ public class BoardGameService {
     }
 
     public BoardGame getSingleBoardGame(Long id) {
-        BoardGame boardGame = boardGameRepository.findById(id).orElse(new BoardGame());
+        // TODO: https://www.baeldung.com/jpa-optimistic-locking, przerobić wszystkie endpointy które wymagaja lockingu pod to
+        BoardGame boardGame = boardGameRepository.findById(id)
+                .orElseThrow(() -> new BoardGameNotFoundException(id));
         BoardGameDescription description = boardGameDescriptionRepository.findById(id).orElse(null);
         boardGame.setDescription(description);
         return boardGame;
@@ -34,8 +37,7 @@ public class BoardGameService {
 
     public BoardGame addBoardGame(BoardGame boardGame, BoardGameDescription description) {
         if (boardGameRepository.existsByName(boardGame.getName())) {
-            // TODO: throw exception if trying to insert duplicate key row for column name
-            return new BoardGame();
+            throw new BoardGameAlreadyExistsException(boardGame.getName());
         }
         boardGameRepository.save(boardGame);
         description.setBoardGameId(boardGame.getId());
@@ -46,13 +48,10 @@ public class BoardGameService {
 
     public BoardGame editBoardGame(BoardGame boardGame, BoardGameDescription description) {
         if (!boardGameRepository.existsById(boardGame.getId())) {
-            // TODO: throw exception if trying to update record which is not in database
-            return new BoardGame();
+            throw new BoardGameNotFoundException(boardGame.getId());
         }
-        if (boardGameRepository.existsByName(boardGame.getName()))
-        {
-            // TODO: throw exception if trying to create by update duplicate key row for column name
-            return new BoardGame();
+        if (boardGameRepository.existsByName(boardGame.getName())) {
+            throw new BoardGameAlreadyExistsException(boardGame.getName());
         }
         boardGameRepository.save(boardGame);
         boardGameDescriptionRepository.save(description);
@@ -62,10 +61,8 @@ public class BoardGameService {
 
     @Transactional
     public void deleteBoardGame(Long id) {
-        if (!boardGameRepository.existsById(id))
-        {
-            // TODO: throw exception if trying to delete record which is not in database
-            return;
+        if (!boardGameRepository.existsById(id)) {
+            throw new BoardGameNotFoundException(id);
         }
         if (boardGameDescriptionRepository.existsById(id))
             boardGameDescriptionRepository.deleteById(id);
