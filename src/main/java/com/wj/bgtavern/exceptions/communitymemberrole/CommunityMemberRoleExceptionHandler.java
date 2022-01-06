@@ -16,22 +16,22 @@ public class CommunityMemberRoleExceptionHandler {
     public ResponseEntity<Object> handleCommunityMemberRoleNotFoundException(CommunityMemberRoleNotFoundException e) {
         ExceptionBody exception = new ExceptionBody(
                 e.getMessage(),
-                HttpStatus.CONFLICT,
+                HttpStatus.NOT_FOUND,
                 ZonedDateTime.now()
         );
 
-        return new ResponseEntity<>(exception, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(CommunityMemberRoleAlreadyExistsException.class)
     public ResponseEntity<Object> handleCommunityMemberRoleAlreadyExistsException(CommunityMemberRoleAlreadyExistsException e) {
         ExceptionBody exception = new ExceptionBody(
                 e.getMessage(),
-                HttpStatus.FOUND,
+                HttpStatus.CONFLICT,
                 ZonedDateTime.now()
         );
 
-        return new ResponseEntity<>(exception, HttpStatus.FOUND);
+        return new ResponseEntity<>(exception, HttpStatus.CONFLICT);
     }
 
 }

@@ -16,22 +16,22 @@ public class LanguageCodeExceptionHandler {
     public ResponseEntity<Object> handleLanguageCodeNotFoundException(LanguageCodeNotFoundException e) {
         ExceptionBody exception = new ExceptionBody(
                 e.getMessage(),
-                HttpStatus.CONFLICT,
+                HttpStatus.NOT_FOUND,
                 ZonedDateTime.now()
         );
 
-        return new ResponseEntity<>(exception, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(LanguageCodeAlreadyExistsException.class)
     public ResponseEntity<Object> handleLanguageCodeExistsException(LanguageCodeAlreadyExistsException e) {
         ExceptionBody exception = new ExceptionBody(
                 e.getMessage(),
-                HttpStatus.FOUND,
+                HttpStatus.CONFLICT,
                 ZonedDateTime.now()
         );
 
-        return new ResponseEntity<>(exception, HttpStatus.FOUND);
+        return new ResponseEntity<>(exception, HttpStatus.CONFLICT);
     }
 
 }

@@ -1,7 +1,6 @@
 package com.wj.bgtavern.models;
 
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +16,13 @@ public class BoardGameDescription {
     private long boardGameId;
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+//    @LazyToOne(value = LazyToOneOption.NO_PROXY)
+    private BoardGame boardGame;
+
+
 
 
 }

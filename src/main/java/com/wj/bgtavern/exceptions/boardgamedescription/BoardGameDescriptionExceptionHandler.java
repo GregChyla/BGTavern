@@ -1,19 +1,19 @@
-package com.wj.bgtavern.exceptions.communitymember;
+package com.wj.bgtavern.exceptions.boardgamedescription;
 
 import com.wj.bgtavern.exceptions.ExceptionBody;
+import com.wj.bgtavern.exceptions.boardgame.BoardGameAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 @ControllerAdvice
-public class CommunityMemberExceptionHandler {
+public class BoardGameDescriptionExceptionHandler {
 
-    @ExceptionHandler(CommunityMemberNotFoundException.class)
-    public ResponseEntity<Object> handleCommunityMemberNotFoundException(CommunityMemberNotFoundException e) {
+    @ExceptionHandler(BoardGameDescriptionNotFoundException.class)
+    public ResponseEntity<Object> handleBoardGameDescriptionNotFoundException(BoardGameDescriptionNotFoundException e) {
         ExceptionBody exception = new ExceptionBody(
                 e.getMessage(),
                 HttpStatus.NOT_FOUND,
@@ -23,8 +23,8 @@ public class CommunityMemberExceptionHandler {
         return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(CommunityMemberAlreadyExistsException.class)
-    public ResponseEntity<Object> handleCommunityMemberAlreadyExistsException(CommunityMemberAlreadyExistsException e) {
+    @ExceptionHandler(BoardGameDescriptionAlreadyExistsException.class)
+    public ResponseEntity<Object> handleBoardGameDescriptionAlreadyExistsException(BoardGameDescriptionAlreadyExistsException e) {
         ExceptionBody exception = new ExceptionBody(
                 e.getMessage(),
                 HttpStatus.CONFLICT,
@@ -33,5 +33,4 @@ public class CommunityMemberExceptionHandler {
 
         return new ResponseEntity<>(exception, HttpStatus.CONFLICT);
     }
-
 }

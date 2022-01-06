@@ -2,8 +2,15 @@ package com.wj.bgtavern.services;
 
 import com.wj.bgtavern.exceptions.boardgame.BoardGameAlreadyExistsException;
 import com.wj.bgtavern.exceptions.boardgame.BoardGameNotFoundException;
+import com.wj.bgtavern.exceptions.boardgamedescription.BoardGameDescriptionAlreadyExistsException;
 import com.wj.bgtavern.models.BoardGame;
 import com.wj.bgtavern.models.BoardGameDescription;
+import com.wj.bgtavern.models.dtos.BoardGameDto;
+import com.wj.bgtavern.models.dtos.BoardGameHeaderDto;
+import com.wj.bgtavern.models.dtos.mappers.BoardGameDescriptionMapper;
+import com.wj.bgtavern.models.dtos.mappers.BoardGameDtoMapper;
+import com.wj.bgtavern.models.dtos.mappers.BoardGameHeaderDtoMapper;
+import com.wj.bgtavern.models.dtos.mappers.BoardGameMapper;
 import com.wj.bgtavern.repositories.BoardGameDescriptionRepository;
 import com.wj.bgtavern.repositories.BoardGameRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,55 +24,85 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardGameService {
 
+    // TODO: https://www.baeldung.com/jpa-optimistic-locking, przerobić wszystkie endpointy które wymagaja lockingu pod to
+
     private final BoardGameRepository boardGameRepository;
-    private final BoardGameDescriptionRepository boardGameDescriptionRepository;
+    private final BoardGameDescriptionService boardGameDescriptionService;
 
 
-    public List<BoardGame> getBoardGames(int pageNumber, int pageSize) {
-        return boardGameRepository.findAllBoardGames(
-                PageRequest.of(pageNumber, pageSize));
+    public List<BoardGameHeaderDto> getBoardGameHeaders(int pageNumber, int pageSize) {
+        List<BoardGame> boardGames = boardGameRepository.findAllBoardGames(PageRequest.of(pageNumber, pageSize));
+        return BoardGameHeaderDtoMapper.mapToBoardGameHeaderDtos(boardGames);
     }
 
-    public BoardGame getSingleBoardGame(Long id) {
-        // TODO: https://www.baeldung.com/jpa-optimistic-locking, przerobić wszystkie endpointy które wymagaja lockingu pod to
-        BoardGame boardGame = boardGameRepository.findById(id)
-                .orElseThrow(() -> new BoardGameNotFoundException(id));
-        BoardGameDescription description = boardGameDescriptionRepository.findById(id).orElse(null);
-        boardGame.setDescription(description);
-        return boardGame;
+//    public List<BoardGame> getBoardGameHeaders(int pageNumber, int pageSize) {
+//        return boardGameRepository.findAllBoardGames(PageRequest.of(pageNumber, pageSize));
+//    }
+
+    public BoardGameDto getSingleBoardGame(Long id) {
+        BoardGame boardGame = boardGameRepository.findById(id).orElseThrow(() -> new BoardGameNotFoundException(id));
+        BoardGameDescription description = boardGameDescriptionService.getBoardGameDescription(id);
+
+        return BoardGameDtoMapper.mapToBoardGameDto(boardGame, description);
     }
 
-    public BoardGame addBoardGame(BoardGame boardGame, BoardGameDescription description) {
-        if (boardGameRepository.existsByName(boardGame.getName())) {
-            throw new BoardGameAlreadyExistsException(boardGame.getName());
-        }
+//    public BoardGame getSingleBoardGame(Long id) {
+//        BoardGame boardGame = boardGameRepository.findById(id).orElseThrow(() -> new BoardGameNotFoundException(id));
+//        return boardGame;
+//    }
+
+    public BoardGameDto addBoardGame(BoardGameDto boardGameDto) {
+        if (boardGameRepository.existsByName(boardGameDto.getName()))
+            throw new BoardGameAlreadyExistsException(boardGameDto.getName());
+        BoardGame boardGame = BoardGameMapper.mapToBoardGame(boardGameDto);
         boardGameRepository.save(boardGame);
-        description.setBoardGameId(boardGame.getId());
-        boardGameDescriptionRepository.save(description);
-        boardGame.setDescription(description);
-        return boardGame;
+        BoardGameDescription boardGameDescription = BoardGameDescriptionMapper.mapToBoardGameDescription(boardGame, boardGameDto);
+        boardGameDescriptionService.addBoardGameDescription(boardGameDescription);
+        return boardGameDto;
     }
 
-    public BoardGame editBoardGame(BoardGame boardGame, BoardGameDescription description) {
-        if (!boardGameRepository.existsById(boardGame.getId())) {
-            throw new BoardGameNotFoundException(boardGame.getId());
-        }
-        if (boardGameRepository.existsByName(boardGame.getName())) {
-            throw new BoardGameAlreadyExistsException(boardGame.getName());
-        }
+//    public BoardGame addBoardGame(BoardGame boardGame) {
+//        if (boardGameRepository.existsByName(boardGame.getName()))
+//            throw new BoardGameAlreadyExistsException(boardGame.getName());
+//
+//        boardGameRepository.save(boardGame);
+//        return boardGame;
+//    }
+
+    public BoardGameDto editBoardGame(Long id, BoardGameDto boardGameDto) {
+        if (!boardGameRepository.existsById(id))
+            throw new BoardGameNotFoundException(id);
+        System.out.println("-------------------------------------------------------------");
+        if (boardGameRepository.existsByNameAndNotWithId(boardGameDto.getName(), id))
+            throw new BoardGameAlreadyExistsException(boardGameDto.getName());
+        System.out.println("-------------------------------------------------------------");
+
+        BoardGame boardGame = BoardGameMapper.mapToBoardGame(id, boardGameDto);
         boardGameRepository.save(boardGame);
-        boardGameDescriptionRepository.save(description);
-        boardGame.setDescription(description);
-        return boardGame;
+        BoardGameDescription boardGameDescription = BoardGameDescriptionMapper.mapToBoardGameDescription(id, boardGameDto);
+        boardGameDescriptionService.editBoardGameDescription(boardGameDescription);
+
+        return boardGameDto;
     }
+
+//    public BoardGame editBoardGame(BoardGame boardGame, BoardGameDescription description) {
+//        if (!boardGameRepository.existsById(boardGame.getId()))
+//            throw new BoardGameNotFoundException(boardGame.getId());
+//        if (boardGameRepository.existsByName(boardGame.getName()))
+//            throw new BoardGameAlreadyExistsException(boardGame.getName());
+//
+//        boardGameRepository.save(boardGame);
+//        description.setBoardGameId(boardGame.getId());
+////        boardGameDescriptionRepository.save(description);
+//        return boardGame;
+//    }
 
     @Transactional
     public void deleteBoardGame(Long id) {
-        if (!boardGameRepository.existsById(id)) {
+        if (!boardGameRepository.existsById(id))
             throw new BoardGameNotFoundException(id);
-        }
-        if (boardGameDescriptionRepository.existsById(id))
-            boardGameDescriptionRepository.deleteById(id);
+
+        boardGameDescriptionService.deleteBoardGame(id);
         boardGameRepository.deleteById(id);
     }
 }
