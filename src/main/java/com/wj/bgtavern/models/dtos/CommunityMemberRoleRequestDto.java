@@ -2,17 +2,17 @@ package com.wj.bgtavern.models.dtos;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Builder
-public class BoardGameDescriptionDto {
+public class CommunityMemberRoleRequestDto {
 
-    @NotNull @Min(1)
-    private Long boardGameId;
-    @NotBlank
+    @NotBlank @Length(max = 255)
+    private String name;
+    @NotBlank @Length(max = 255)
     private String description;
 }

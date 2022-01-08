@@ -5,11 +5,9 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class BoardGameTeamMemberDto {
-
+public class BoardGameTeamMemberResponseDto {
     private long id;
     private String memberName;
     private String memberNationality;
     private String roleName;
-
 }

@@ -1,10 +1,13 @@
 package com.wj.bgtavern.controllers;
 
 import com.wj.bgtavern.models.CommunityMember;
+import com.wj.bgtavern.models.dtos.CommunityMemberRequestDto;
+import com.wj.bgtavern.models.dtos.CommunityMemberResponseDto;
 import com.wj.bgtavern.services.CommunityMemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -14,19 +17,19 @@ public class CommunityMemberController {
     private final CommunityMemberService communityMemberService;
 
     @GetMapping("/community_members")
-    public List<CommunityMember> getCommunityMembers(){
+    public List<CommunityMemberResponseDto> getCommunityMembers(){
         return communityMemberService.getCommunityMembers();
     }
 
     @PostMapping("/community_members")
-    public CommunityMember addCommunityMember(@RequestBody CommunityMember communityMember) {
-        return communityMemberService.addCommunityMember(communityMember);
+    public CommunityMemberResponseDto addCommunityMember(@RequestBody @Valid CommunityMemberRequestDto communityMemberRequestDto) {
+        return communityMemberService.addCommunityMember(communityMemberRequestDto);
     }
 
     @PutMapping("/community_members/{id}")
-    public CommunityMember editCommunityMember(@PathVariable Long id, @RequestBody CommunityMember communityMember) {
-        communityMember.setId(id);
-        return communityMemberService.editCommunityMember(communityMember);
+    public CommunityMemberResponseDto editCommunityMember(
+            @PathVariable Long id, @RequestBody @Valid CommunityMemberRequestDto communityMemberRequestDto) {
+        return communityMemberService.editCommunityMember(id, communityMemberRequestDto);
     }
 
     @DeleteMapping("/community_members/{id}")

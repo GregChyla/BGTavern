@@ -17,14 +17,12 @@ public class BoardGameTeamMember {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private long boardGameId;
-//    private long communityMemberId;
-//    private long communityMemberRoleId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="communityMemberId", referencedColumnName = "id")
     private CommunityMember member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="communityMemberRoleId", referencedColumnName = "id")
     private CommunityMemberRole role;
 
