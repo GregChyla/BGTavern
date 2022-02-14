@@ -17,12 +17,7 @@ public class BoardGameDescription {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @MapsId
-//    @LazyToOne(value = LazyToOneOption.NO_PROXY)
     private BoardGame boardGame;
-
-
-
-
 }

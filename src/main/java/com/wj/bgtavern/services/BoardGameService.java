@@ -34,9 +34,7 @@ public class BoardGameService {
 
     public BoardGameResponseDto getSingleBoardGame(Long id) {
         BoardGame boardGame = boardGameRepository.findById(id).orElseThrow(() -> new BoardGameNotFoundException(id));
-        System.out.println("--------------------------------------------------- 1");
         BoardGameDescription description = boardGameDescriptionService.getBoardGameDescription(id);
-        System.out.println("--------------------------------------------------- 2");
         return BoardGameMapper.mapToBoardGameResponseDto(boardGame, description);
     }
 
@@ -59,18 +57,20 @@ public class BoardGameService {
 
         BoardGame boardGame = BoardGameMapper.mapToBoardGame(id, boardGameRequestDto);
         boardGameRepository.save(boardGame);
+
+        //TODO: Tutaj się coś sypie, poczytać o tym: https://www.baeldung.com/spring-data-jpa-dynamicupdate?fbclid=IwAR1_kYfxz9_-6c25Eas-lplhN-1p74YV_OD9oUuRw2BMezoJnXRkQQir_H0
+        //TODO: albo o optimistic i pesimistic locking
         BoardGameDescription boardGameDescription = BoardGameDescriptionMapper.mapToBoardGameDescription(id, boardGameRequestDto);
-        boardGameDescriptionService.editBoardGameDescription(boardGameDescription);
+        boardGameDescriptionService.addBoardGameDescription(boardGameDescription);
         BoardGameResponseDto boardGameResponseDto = BoardGameMapper.mapToBoardGameResponseDto(boardGame, boardGameDescription);
         return boardGameResponseDto;
     }
 
-    @Transactional
+//    @Transactional
     public void deleteBoardGame(Long id) {
         if (!boardGameRepository.existsById(id))
             throw new BoardGameNotFoundException(id);
-
-        boardGameDescriptionService.deleteBoardGameDescription(id);
+//        boardGameDescriptionService.deleteBoardGameDescription(id);
         boardGameRepository.deleteById(id);
     }
 }

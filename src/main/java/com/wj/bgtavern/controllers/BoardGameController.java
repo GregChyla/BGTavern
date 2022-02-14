@@ -37,6 +37,7 @@ public class BoardGameController {
     public BoardGameResponseDto addBoardGame(@RequestBody @Valid BoardGameRequestDto boardGameRequestDto) {
         return boardGameService.addBoardGame(boardGameRequestDto);
     }
+
     @PutMapping("/board_games/{id}")
     public BoardGameResponseDto editBoardGame(@PathVariable Long id, @RequestBody @Valid BoardGameRequestDto boardGameRequestDto) {
         return boardGameService.editBoardGame(id, boardGameRequestDto);

@@ -4,6 +4,7 @@ import com.wj.bgtavern.exceptions.boardgamedescription.BoardGameDescriptionAlrea
 import com.wj.bgtavern.exceptions.boardgamedescription.BoardGameDescriptionNotFoundException;
 import com.wj.bgtavern.models.BoardGameDescription;
 import com.wj.bgtavern.models.dtos.BoardGameDescriptionDto;
+import com.wj.bgtavern.models.dtos.BoardGameDescriptionRequestDto;
 import com.wj.bgtavern.models.dtos.mappers.BoardGameDescriptionMapper;
 import com.wj.bgtavern.repositories.BoardGameDescriptionRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,15 +22,19 @@ public class BoardGameDescriptionService {
     }
 
     public BoardGameDescriptionDto addBoardGameDescription(BoardGameDescription boardGameDescription) {
+        System.out.println("ID" + boardGameDescription.getBoardGameId());
         if (boardGameDescriptionRepository.existsById(boardGameDescription.getBoardGameId()))
             throw new BoardGameDescriptionAlreadyExistsException(boardGameDescription.getBoardGameId());
 
         return BoardGameDescriptionMapper.mapToBoardGameDescriptionDto(boardGameDescriptionRepository.save(boardGameDescription));
     }
 
-    public BoardGameDescriptionDto editBoardGameDescription(BoardGameDescription boardGameDescription) {
-        if (!boardGameDescriptionRepository.existsById(boardGameDescription.getBoardGameId()))
-            throw new BoardGameDescriptionNotFoundException(boardGameDescription.getBoardGameId());
+    public BoardGameDescriptionDto editBoardGameDescription(Long boardGameId, BoardGameDescriptionRequestDto boardGameDescriptionRequestDto) {
+
+        if (!boardGameDescriptionRepository.existsById(boardGameId))
+            throw new BoardGameDescriptionNotFoundException(boardGameId);
+
+        BoardGameDescription boardGameDescription = BoardGameDescriptionMapper.mapToBoardGameDescription(boardGameId, boardGameDescriptionRequestDto);
 
         return BoardGameDescriptionMapper.mapToBoardGameDescriptionDto(boardGameDescriptionRepository.save(boardGameDescription));
     }

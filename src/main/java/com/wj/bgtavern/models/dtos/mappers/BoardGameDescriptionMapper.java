@@ -3,6 +3,7 @@ package com.wj.bgtavern.models.dtos.mappers;
 import com.wj.bgtavern.models.BoardGame;
 import com.wj.bgtavern.models.BoardGameDescription;
 import com.wj.bgtavern.models.dtos.BoardGameDescriptionDto;
+import com.wj.bgtavern.models.dtos.BoardGameDescriptionRequestDto;
 import com.wj.bgtavern.models.dtos.BoardGameRequestDto;
 import com.wj.bgtavern.models.dtos.BoardGameResponseDto;
 import lombok.AccessLevel;
@@ -16,6 +17,13 @@ public class BoardGameDescriptionMapper {
                 .boardGameId(boardGameDescription.getBoardGameId())
                 .description(boardGameDescription.getDescription())
                 .build();
+    }
+
+    public static BoardGameDescription mapToBoardGameDescription(Long boardGameId, BoardGameDescriptionRequestDto boardGameDescriptionRequestDto) {
+        BoardGameDescription description = new BoardGameDescription();
+        description.setDescription(boardGameDescriptionRequestDto.getDescription() != null ? boardGameDescriptionRequestDto.getDescription() : "");
+        description.setBoardGameId(boardGameId);
+        return description;
     }
 
     public static BoardGameDescription mapToBoardGameDescription(Long id, BoardGameRequestDto boardGameRequestDto) {

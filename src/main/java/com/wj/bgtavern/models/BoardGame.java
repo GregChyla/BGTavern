@@ -25,6 +25,9 @@ public class BoardGame {
     @Column(columnDefinition="DECIMAL", precision=3, scale=2)
     private double complexity;
     private int languageDependence;
+
+    @OneToOne(orphanRemoval = true, mappedBy = "boardGame")
+    private BoardGameDescription description;
 //
 //    @OneToOne(mappedBy = "boardGame", cascade = CascadeType.ALL,
 //              fetch = FetchType.LAZY, optional = false)
