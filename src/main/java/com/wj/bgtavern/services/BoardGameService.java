@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.LockModeType;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class BoardGameService {
         return boardGameResponseDto;
     }
 
+    @Transactional
     public BoardGameResponseDto editBoardGame(Long id, BoardGameRequestDto boardGameRequestDto) {
         if (!boardGameRepository.existsById(id))
             throw new BoardGameNotFoundException(id);
@@ -60,8 +62,8 @@ public class BoardGameService {
 
         //TODO: Tutaj się coś sypie, poczytać o tym: https://www.baeldung.com/spring-data-jpa-dynamicupdate?fbclid=IwAR1_kYfxz9_-6c25Eas-lplhN-1p74YV_OD9oUuRw2BMezoJnXRkQQir_H0
         //TODO: albo o optimistic i pesimistic locking
-        BoardGameDescription boardGameDescription = BoardGameDescriptionMapper.mapToBoardGameDescription(id, boardGameRequestDto);
-        boardGameDescriptionService.addBoardGameDescription(boardGameDescription);
+        BoardGameDescription boardGameDescription = BoardGameDescriptionMapper.mapToBoardGameDescription(boardGame, boardGameRequestDto);
+        boardGameDescriptionService.editBoardGameDescription(boardGameDescription);
         BoardGameResponseDto boardGameResponseDto = BoardGameMapper.mapToBoardGameResponseDto(boardGame, boardGameDescription);
         return boardGameResponseDto;
     }

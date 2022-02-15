@@ -39,6 +39,14 @@ public class BoardGameDescriptionService {
         return BoardGameDescriptionMapper.mapToBoardGameDescriptionDto(boardGameDescriptionRepository.save(boardGameDescription));
     }
 
+    public BoardGameDescription editBoardGameDescription(BoardGameDescription boardGameDescription) {
+
+        if (!boardGameDescriptionRepository.existsById(boardGameDescription.getBoardGameId()))
+            throw new BoardGameDescriptionNotFoundException(boardGameDescription.getBoardGameId());
+
+        return boardGameDescriptionRepository.save(boardGameDescription);
+    }
+
     public void deleteBoardGameDescription(Long id) {
         if (!boardGameDescriptionRepository.existsById(id))
             throw new BoardGameDescriptionNotFoundException(id);

@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Setter
 @Table(name="board_game_descriptions")
 public class BoardGameDescription {
-
     @Id
     private long boardGameId;
     @Column(columnDefinition = "TEXT")

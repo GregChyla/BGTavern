@@ -40,6 +40,7 @@ public class BoardGameDescriptionMapper {
 
     public static BoardGameDescription mapToBoardGameDescription(BoardGame boardGame, BoardGameRequestDto boardGameRequestDto) {
         BoardGameDescription description = new BoardGameDescription();
+        description.setBoardGameId(boardGame.getId());
         description.setBoardGame(boardGame);
         description.setDescription(boardGameRequestDto.getDescription() != null ? boardGameRequestDto.getDescription() : ""); // there always should be a description even if empty
         return description;

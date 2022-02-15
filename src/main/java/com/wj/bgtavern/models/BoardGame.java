@@ -1,6 +1,7 @@
 package com.wj.bgtavern.models;
 
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
 
@@ -13,7 +14,6 @@ import java.util.List;
 @Setter
 @Table(name="board_games")
 public class BoardGame {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -26,7 +26,7 @@ public class BoardGame {
     private double complexity;
     private int languageDependence;
 
-    @OneToOne(orphanRemoval = true, mappedBy = "boardGame")
+    @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "boardGame")
     private BoardGameDescription description;
 //
 //    @OneToOne(mappedBy = "boardGame", cascade = CascadeType.ALL,
