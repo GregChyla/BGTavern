@@ -26,7 +26,7 @@ public class BoardGame {
     private double complexity;
     private int languageDependence;
 
-    @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "boardGame")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "boardGame", optional = false)
     private BoardGameDescription description;
 //
 //    @OneToOne(mappedBy = "boardGame", cascade = CascadeType.ALL,

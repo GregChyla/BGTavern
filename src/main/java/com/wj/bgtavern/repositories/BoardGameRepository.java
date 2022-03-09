@@ -1,6 +1,7 @@
 package com.wj.bgtavern.repositories;
 
 import com.wj.bgtavern.models.BoardGame;
+import com.wj.bgtavern.models.dtos.BoardGameHeaderDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,6 +17,9 @@ public interface BoardGameRepository extends JpaRepository<BoardGame, Long> {
 
     @Query("select bg from BoardGame bg")
     List<BoardGame> findAllBoardGames(Pageable page);
+
+    @Query("SELECT new com.wj.bgtavern.models.dtos.BoardGameHeaderDto(bg.id, bg.name) FROM BoardGame bg")
+    List<BoardGameHeaderDto> findAllBoardGameHeaders(Pageable page);
 
     BoardGame findByName(String name);
 

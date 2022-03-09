@@ -29,8 +29,10 @@ public class BoardGameService {
 
 
     public List<BoardGameHeaderDto> getBoardGameHeaders(int pageNumber, int pageSize) {
-        List<BoardGame> boardGames = boardGameRepository.findAllBoardGames(PageRequest.of(pageNumber, pageSize));
-        return BoardGameMapper.mapToBoardGameHeaderDtos(boardGames);
+//        List<BoardGame> boardGames = boardGameRepository.findAllBoardGames(PageRequest.of(pageNumber, pageSize));
+//        return BoardGameMapper.mapToBoardGameHeaderDtos(boardGames);
+        List<BoardGameHeaderDto> boardGameHeaderDtos = boardGameRepository.findAllBoardGameHeaders(PageRequest.of(pageNumber, pageSize));
+        return boardGameHeaderDtos;
     }
 
     public BoardGameResponseDto getSingleBoardGame(Long id) {

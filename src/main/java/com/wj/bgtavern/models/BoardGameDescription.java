@@ -16,7 +16,9 @@ public class BoardGameDescription {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
+    // Gdyby pole id z opisu nie nazywało się boardGameId tylko np Id, to trzeba było by dołożyć
+    // adnotację @JoinColumn(name = "Id")
     private BoardGame boardGame;
 }
