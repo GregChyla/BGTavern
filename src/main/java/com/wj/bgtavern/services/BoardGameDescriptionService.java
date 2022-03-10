@@ -22,7 +22,6 @@ public class BoardGameDescriptionService {
     }
 
     public BoardGameDescriptionDto addBoardGameDescription(BoardGameDescription boardGameDescription) {
-        System.out.println("ID" + boardGameDescription.getBoardGameId());
         if (boardGameDescriptionRepository.existsById(boardGameDescription.getBoardGameId()))
             throw new BoardGameDescriptionAlreadyExistsException(boardGameDescription.getBoardGameId());
 

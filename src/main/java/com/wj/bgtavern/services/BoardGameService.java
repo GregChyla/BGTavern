@@ -22,23 +22,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardGameService {
 
-    // TODO: https://www.baeldung.com/jpa-optimistic-locking, przerobić wszystkie endpointy które wymagaja lockingu pod to
 
     private final BoardGameRepository boardGameRepository;
     private final BoardGameDescriptionService boardGameDescriptionService;
 
 
     public List<BoardGameHeaderDto> getBoardGameHeaders(int pageNumber, int pageSize) {
-//        List<BoardGame> boardGames = boardGameRepository.findAllBoardGames(PageRequest.of(pageNumber, pageSize));
-//        return BoardGameMapper.mapToBoardGameHeaderDtos(boardGames);
         List<BoardGameHeaderDto> boardGameHeaderDtos = boardGameRepository.findAllBoardGameHeaders(PageRequest.of(pageNumber, pageSize));
         return boardGameHeaderDtos;
     }
 
     public BoardGameResponseDto getSingleBoardGame(Long id) {
-        BoardGame boardGame = boardGameRepository.findById(id).orElseThrow(() -> new BoardGameNotFoundException(id));
-        BoardGameDescription description = boardGameDescriptionService.getBoardGameDescription(id);
-        return BoardGameMapper.mapToBoardGameResponseDto(boardGame, description);
+        if (!boardGameRepository.existsById(id))
+            throw new BoardGameNotFoundException(id);
+        BoardGame boardGame = boardGameRepository.findByIdWithDescription(id);
+        return BoardGameMapper.mapToBoardGameResponseDto(boardGame);
     }
 
     public BoardGameResponseDto addBoardGame(BoardGameRequestDto boardGameRequestDto) {
@@ -46,9 +44,7 @@ public class BoardGameService {
             throw new BoardGameAlreadyExistsException(boardGameRequestDto.getName());
         BoardGame boardGame = BoardGameMapper.mapToBoardGame(boardGameRequestDto);
         boardGameRepository.save(boardGame);
-        BoardGameDescription boardGameDescription = BoardGameDescriptionMapper.mapToBoardGameDescription(boardGame, boardGameRequestDto);
-        boardGameDescriptionService.addBoardGameDescription(boardGameDescription);
-        BoardGameResponseDto boardGameResponseDto = BoardGameMapper.mapToBoardGameResponseDto(boardGame, boardGameDescription);
+        BoardGameResponseDto boardGameResponseDto = BoardGameMapper.mapToBoardGameResponseDto(boardGame);
         return boardGameResponseDto;
     }
 
@@ -62,11 +58,9 @@ public class BoardGameService {
         BoardGame boardGame = BoardGameMapper.mapToBoardGame(id, boardGameRequestDto);
         boardGameRepository.save(boardGame);
 
-        //TODO: Tutaj się coś sypie, poczytać o tym: https://www.baeldung.com/spring-data-jpa-dynamicupdate?fbclid=IwAR1_kYfxz9_-6c25Eas-lplhN-1p74YV_OD9oUuRw2BMezoJnXRkQQir_H0
-        //TODO: albo o optimistic i pesimistic locking
-        BoardGameDescription boardGameDescription = BoardGameDescriptionMapper.mapToBoardGameDescription(boardGame, boardGameRequestDto);
-        boardGameDescriptionService.editBoardGameDescription(boardGameDescription);
-        BoardGameResponseDto boardGameResponseDto = BoardGameMapper.mapToBoardGameResponseDto(boardGame, boardGameDescription);
+//        BoardGameDescription boardGameDescription = BoardGameDescriptionMapper.mapToBoardGameDescription(boardGame, boardGameRequestDto);
+//        boardGameDescriptionService.editBoardGameDescription(boardGameDescription);
+        BoardGameResponseDto boardGameResponseDto = BoardGameMapper.mapToBoardGameResponseDto(boardGame);
         return boardGameResponseDto;
     }
 

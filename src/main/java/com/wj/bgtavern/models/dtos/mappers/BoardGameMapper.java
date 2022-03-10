@@ -17,6 +17,7 @@ public class BoardGameMapper {
     public static BoardGame mapToBoardGame(Long id, BoardGameRequestDto boardGameRequestDto) {
         BoardGame boardGame = mapToBoardGame(boardGameRequestDto);
         boardGame.setId(id);
+        boardGame.getDescription().setBoardGameId(id);
         return boardGame;
     }
 
@@ -29,6 +30,9 @@ public class BoardGameMapper {
         boardGame.setMaxPlayersNumber(boardGameRequestDto.getMaxPlayersNumber());
         boardGame.setComplexity(boardGameRequestDto.getComplexity());
         boardGame.setLanguageDependence(boardGameRequestDto.getLanguageDependence());
+        boardGame.setDescription(new BoardGameDescription());
+        boardGame.getDescription().setDescription(boardGameRequestDto.getDescription());
+        boardGame.getDescription().setBoardGame(boardGame);
         return boardGame;
     }
 
@@ -57,6 +61,20 @@ public class BoardGameMapper {
                 .complexity(boardGame.getComplexity())
                 .languageDependence(boardGame.getLanguageDependence())
                 .description(boardGameDescription != null ? boardGameDescription.getDescription() : "")
+                .build();
+    }
+
+    public static BoardGameResponseDto mapToBoardGameResponseDto(BoardGame boardGame) {
+        return BoardGameResponseDto.builder()
+                .id(boardGame.getId())
+                .name(boardGame.getName())
+                .playingTime(boardGame.getPlayingTime())
+                .age(boardGame.getAge())
+                .minPlayersNumber(boardGame.getMinPlayersNumber())
+                .maxPlayersNumber(boardGame.getMaxPlayersNumber())
+                .complexity(boardGame.getComplexity())
+                .languageDependence(boardGame.getLanguageDependence())
+                .description(boardGame.getDescription() != null ? boardGame.getDescription().getDescription() : "")
                 .build();
     }
 

@@ -21,6 +21,9 @@ public interface BoardGameRepository extends JpaRepository<BoardGame, Long> {
     @Query("SELECT new com.wj.bgtavern.models.dtos.BoardGameHeaderDto(bg.id, bg.name) FROM BoardGame bg")
     List<BoardGameHeaderDto> findAllBoardGameHeaders(Pageable page);
 
+    @Query("SELECT bg, bgd FROM BoardGame bg LEFT JOIN FETCH bg.description bgd WHERE bg.id = :id")
+    BoardGame findByIdWithDescription(Long id);
+
     BoardGame findByName(String name);
 
     boolean existsByName(String name);
