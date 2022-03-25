@@ -14,7 +14,7 @@ public class LanguageCodeMapper {
 
     public static List<LanguageCodeResponseDto> mapToLanguageCodeResponseDtos(List<LanguageCode> languageCodes){
         return languageCodes.stream()
-                .map(languageCode -> mapToLanguageCodeResponseDto(languageCode))
+                .map(LanguageCodeMapper::mapToLanguageCodeResponseDto)
                 .collect(Collectors.toList());
     }
 

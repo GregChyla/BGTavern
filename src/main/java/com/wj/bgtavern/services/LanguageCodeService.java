@@ -18,7 +18,6 @@ public class LanguageCodeService {
 
     private final LanguageCodeRepository languageCodeRepository;
 
-
     public List<LanguageCodeResponseDto> getLanguageCodes() {
         return LanguageCodeMapper.mapToLanguageCodeResponseDtos(languageCodeRepository.findAll());
     }
